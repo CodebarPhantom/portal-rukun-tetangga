@@ -14,7 +14,7 @@ class Location extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'address', 'phone', 'status', 'latitude','longitude','radius'];
+    protected $fillable = ['name', 'address', 'phone', 'status', 'latitude','longitude','radius', 'location_category_id'];
 
     public function getStatusColorAttribute()
     {

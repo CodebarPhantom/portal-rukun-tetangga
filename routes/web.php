@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\SummaryController;
 use App\Http\Controllers\Web\LandingController;
 
 Route::get('/', [LandingController::class, 'index'])->name('index');
+Route::get('/landing/filter/{categoryId}', [LandingController::class, 'filter'])->name('landing.filter');
 
 Route::middleware(['auth'/*, 'verified'*/])->group(function () {
 

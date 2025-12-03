@@ -12,8 +12,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-
             @include('welcome.style')
+
 
 </head>
 
@@ -35,14 +35,13 @@
         @include('welcome.header')
 
         <!-- Include Content -->
-        @include('welcome.content')
+        @include('welcome.filtered')
 
         <!-- Include Footer -->
         @include('welcome.footer')
     </div>
 
-    <!-- Toast Notification -->
-        @include('welcome.script')
+    @include('welcome.script')
 
 </body>
 

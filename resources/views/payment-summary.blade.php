@@ -8,7 +8,7 @@
     <title>Konfirmasi Berhasil - RT 037</title>
     <meta name="description" content="Konfirmasi pembayaran berhasil dikirim">
 
-    <link rel="icon" type="image/png" href="{{ asset('rumio.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('storage/rumio.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
@@ -92,7 +92,7 @@
 
             <!-- Action Buttons -->
             <div class="space-y-4">
-                <button onclick="sendWhatsApp()" class="w-full btn btn-success py-4 text-base text-center font-semibold">
+                <button onclick="sendWhatsApp()" class="w-full btn btn-success py-4 text-base font-semibold flex items-center justify-center">
                     <i class="fab fa-whatsapp mr-2"></i>
                     Konfirmasi via WhatsApp
                 </button>

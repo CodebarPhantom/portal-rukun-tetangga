@@ -6,7 +6,7 @@
 
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script>
         function selectCategory(id, name) {
             localStorage.setItem('selectedCategory', JSON.stringify({
@@ -146,15 +146,21 @@
                 blockSelect.addEventListener('change', function() {
                     const blockId = this.value;
                     const locationSelect = document.getElementById('locationSelect');
-                    
+
                     if (blockId) {
-                        fetch(`/api/locations/block/${blockId}`)
+                        fetch(`/api/v1/locations/block/${blockId}`)
                             .then(response => response.json())
-                            .then(data => {
+                            .then(response => {
+                                // console.log('API Response:', response);
                                 locationSelect.innerHTML = '<option value="">-- Pilih Lokasi --</option>';
-                                data.forEach(location => {
-                                    locationSelect.innerHTML += `<option value="${location.id}">${location.name}</option>`;
-                                });
+
+                                // Handle both old and new response formats
+                                const locations = response.data || response;
+                                if (Array.isArray(locations)) {
+                                    locations.forEach(location => {
+                                        locationSelect.innerHTML += `<option value="${location.id}">${location.name}</option>`;
+                                    });
+                                }
                                 locationSelect.disabled = false;
                             })
                             .catch(error => {
@@ -174,13 +180,13 @@
                 submitBtn.addEventListener('click', function() {
                     const form = document.getElementById('paymentForm');
                     const formData = new FormData(form);
-                    
+
                     // Get form values for validation
                     const locationId = document.getElementById('locationSelect').value;
                     const payerName = document.getElementById('payerName').value;
                     const month = document.getElementById('monthSelect').value;
                     const amount = parseNumber(document.getElementById('amount').value || '0');
-                    
+
                     // Validation
                     if (!locationId || !payerName || !month || !amount) {
                         Swal.fire({
@@ -212,7 +218,7 @@
                     submitData.append('month', month);
                     submitData.append('amount', amount);
                     submitData.append('notes', document.getElementById('notes').value);
-                    
+
                     const proofFile = document.getElementById('proofFile').files[0];
                     if (proofFile) {
                         submitData.append('proof_file', proofFile);
@@ -229,7 +235,7 @@
                     .then(response => response.json())
                     .then(data => {
                         Swal.close();
-                        
+
                         if (data.success) {
                             // Redirect to summary page
                             window.location.href = data.redirect_url;

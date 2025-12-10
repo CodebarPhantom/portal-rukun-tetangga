@@ -15,9 +15,10 @@ use App\Http\Controllers\Web\PaymentConfirmationController;
 
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/landing/filter/{categoryId}', [LandingController::class, 'filter'])->name('landing.filter');
-Route::get('/api/locations/block/{blockId}', [LandingController::class, 'getLocationsByBlock'])->name('api.locations.block');
+
 Route::post('/payment/submit', [LandingController::class, 'submitPayment'])->name('payment.submit');
 Route::get('/payment/summary/{confirmation}', [LandingController::class, 'paymentSummary'])->name('payment.summary');
+
 
 Route::middleware(['auth'/*, 'verified'*/])->group(function () {
 

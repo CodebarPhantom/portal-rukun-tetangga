@@ -13,6 +13,13 @@ return
                 'route' => 'dashboard',
                 'pathUrl' => ['/dashboard', 'dashboard']
             ],
+            [
+                'title' => 'Konfirmasi Pembayaran',
+                'icon' => 'ki-filled ki-element-11',
+                'permission' => null,
+                'route' => 'admin.payment-confirmations.index',
+                'pathUrl' => ['admin/payment-confirmations*']
+            ],
             // [
             //     'header' => 'Aktifitas Saya',
             // ],

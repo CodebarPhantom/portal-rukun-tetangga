@@ -107,4 +107,18 @@ class LocationController extends MasterController
 
         return $this->callFunction($func);
     }
+
+    public function getLocationsByBlock($blockId)
+    {
+        $func = function () use ($blockId) {
+            $locations = Location::where('location_category_id', $blockId)
+                ->orderBy('name','ASC')
+                ->active()
+                ->get();
+            
+            $this->data = $locations;
+        };
+
+        return $this->callFunction($func);
+    }
 }

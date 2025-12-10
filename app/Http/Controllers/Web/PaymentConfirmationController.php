@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MasterController;
 use App\Models\PaymentConfirmation;
 use Illuminate\Http\Request;
 
-class PaymentConfirmationController extends Controller
+class PaymentConfirmationController extends MasterController
 {
     public function index()
     {
-        $confirmations = PaymentConfirmation::with(['location', 'locationCategory'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(20);
-            
-        return view('admin.payment-confirmations.index', compact('confirmations'));
+        $func = function () {
+
+
+            $breadcrumbs = ['Konfirmasi Pembayaran'];
+            $pageTitle = "Lokasi";
+            $this->data = compact('breadcrumbs', 'pageTitle');
+        };
+
+        return $this->callFunction($func, view('admin.payment-confirmations.index'));
     }
 
     public function updateStatus(PaymentConfirmation $confirmation, Request $request)

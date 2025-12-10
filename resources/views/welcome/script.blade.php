@@ -1,9 +1,12 @@
-<div id="toast"
-        class="toast fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3">
-        <i class="bi bi-check-circle-fill text-green-400 text-xl"></i>
-        <span id="toast-message" class="font-medium"></span>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+        <span id="toastMessage" class="font-medium"></span>
     </div>
 
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <script>
         function selectCategory(id, name) {
             localStorage.setItem('selectedCategory', JSON.stringify({
@@ -95,9 +98,20 @@
             });
         }
 
+        // Format number with comma separator
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Parse number from formatted string
+        function parseNumber(str) {
+            return str.replace(/,/g, '');
+        }
+
+        // Show Toast
         function showToast(message) {
             const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
+            const toastMessage = document.getElementById('toastMessage');
 
             toastMessage.textContent = message;
             toast.classList.add('show');
@@ -107,29 +121,174 @@
             }, 3000);
         }
 
+        // Initialize tab indicator position
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabIndicator = document.getElementById('tabIndicator');
+            if (tabIndicator) {
+                tabIndicator.style.width = '50%';
+                tabIndicator.style.left = '0';
+            }
+
+            // Amount input formatting (for form pages)
+            const amountInput = document.getElementById('amount');
+            if (amountInput) {
+                amountInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/,/g, '');
+                    if (!isNaN(value) && value !== '') {
+                        e.target.value = formatNumber(value);
+                    }
+                });
+            }
+
+            // Block selection for non-block categories (for form pages)
+            const blockSelect = document.getElementById('blockSelect');
+            if (blockSelect) {
+                blockSelect.addEventListener('change', function() {
+                    const blockId = this.value;
+                    const locationSelect = document.getElementById('locationSelect');
+                    
+                    if (blockId) {
+                        fetch(`/api/locations/block/${blockId}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                locationSelect.innerHTML = '<option value="">-- Pilih Lokasi --</option>';
+                                data.forEach(location => {
+                                    locationSelect.innerHTML += `<option value="${location.id}">${location.name}</option>`;
+                                });
+                                locationSelect.disabled = false;
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                showToast('Gagal memuat lokasi');
+                            });
+                    } else {
+                        locationSelect.innerHTML = '<option value="">-- Pilih Lokasi --</option>';
+                        locationSelect.disabled = true;
+                    }
+                });
+            }
+
+            // Submit form (for form pages)
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function() {
+                    const form = document.getElementById('paymentForm');
+                    const formData = new FormData(form);
+                    
+                    // Get form values for validation
+                    const locationId = document.getElementById('locationSelect').value;
+                    const payerName = document.getElementById('payerName').value;
+                    const month = document.getElementById('monthSelect').value;
+                    const amount = parseNumber(document.getElementById('amount').value || '0');
+                    
+                    // Validation
+                    if (!locationId || !payerName || !month || !amount) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Form Belum Lengkap',
+                            text: 'Mohon lengkapi semua field yang wajib diisi',
+                            confirmButtonColor: '#3b82f6'
+                        });
+                        return;
+                    }
+
+                    // Show loading
+                    Swal.fire({
+                        title: 'Mengirim Konfirmasi...',
+                        text: 'Mohon tunggu sebentar',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    // Prepare form data
+                    const submitData = new FormData();
+                    submitData.append('location_id', locationId);
+                    submitData.append('location_category_id', document.querySelector('[data-category-id]')?.getAttribute('data-category-id') || '');
+                    submitData.append('payer_name', payerName);
+                    submitData.append('month', month);
+                    submitData.append('amount', amount);
+                    submitData.append('notes', document.getElementById('notes').value);
+                    
+                    const proofFile = document.getElementById('proofFile').files[0];
+                    if (proofFile) {
+                        submitData.append('proof_file', proofFile);
+                    }
+
+                    // Submit to server
+                    fetch('/payment/submit', {
+                        method: 'POST',
+                        body: submitData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.close();
+                        
+                        if (data.success) {
+                            // Redirect to summary page
+                            window.location.href = data.redirect_url;
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal Mengirim',
+                                text: data.message || 'Terjadi kesalahan saat mengirim konfirmasi',
+                                confirmButtonColor: '#ef4444'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.close();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: 'Gagal mengirim konfirmasi. Silakan coba lagi.',
+                            confirmButtonColor: '#ef4444'
+                        });
+                    });
+                });
+            }
+        });
+
+        // Add click handlers to category cards only (not all cards)
+        document.querySelectorAll('a[href*="landing.filter"] .card').forEach(card => {
+            card.addEventListener('click', function() {
+                const blockName = this.querySelector('h3')?.textContent;
+                if (blockName) {
+                    showToast(`✓ ${blockName} dipilih`);
+                }
+            });
+        });
+
+        // Tab Switching
         function switchTab(tab) {
-            // Hide all content
-            document.getElementById('content-bendahara').classList.add('hidden');
-            document.getElementById('content-masjid').classList.add('hidden');
+            const bendaharaContent = document.getElementById('bendaharaContent');
+            const masjidContent = document.getElementById('masjidContent');
+            const tabIndicator = document.getElementById('tabIndicator');
+            const tabButtons = document.querySelectorAll('.tab-button');
 
-            // Remove active class from all tabs
-            document.getElementById('tab-bendahara').classList.remove('tab-active');
-            document.getElementById('tab-masjid').classList.remove('tab-active');
-            document.getElementById('tab-bendahara').classList.add('text-gray-500');
-            document.getElementById('tab-masjid').classList.add('text-gray-500');
-
-            // Move tab indicator
-            const indicator = document.getElementById('tab-indicator');
-            if (tab === 'bendahara') {
-                document.getElementById('content-bendahara').classList.remove('hidden');
-                document.getElementById('tab-bendahara').classList.add('tab-active');
-                document.getElementById('tab-bendahara').classList.remove('text-gray-500');
-                indicator.style.left = '0px';
-            } else {
-                document.getElementById('content-masjid').classList.remove('hidden');
-                document.getElementById('tab-masjid').classList.add('tab-active');
-                document.getElementById('tab-masjid').classList.remove('text-gray-500');
-                indicator.style.left = '108px';
+            if (bendaharaContent && masjidContent && tabIndicator && tabButtons.length > 0) {
+                if (tab === 'bendahara') {
+                    bendaharaContent.classList.remove('hidden');
+                    masjidContent.classList.add('hidden');
+                    tabIndicator.style.width = '50%';
+                    tabIndicator.style.left = '0';
+                    tabButtons[0].classList.add('active');
+                    tabButtons[1].classList.remove('active');
+                } else {
+                    bendaharaContent.classList.add('hidden');
+                    masjidContent.classList.remove('hidden');
+                    tabIndicator.style.width = '50%';
+                    tabIndicator.style.left = '50%';
+                    tabButtons[1].classList.add('active');
+                    tabButtons[0].classList.remove('active');
+                }
             }
         }
     </script>

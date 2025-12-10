@@ -11,15 +11,23 @@ use App\Http\Controllers\Web\FormEntryController;
 use App\Http\Controllers\Web\User\UserController;
 use App\Http\Controllers\Web\SummaryController;
 use App\Http\Controllers\Web\LandingController;
+use App\Http\Controllers\Web\PaymentConfirmationController;
 
 Route::get('/', [LandingController::class, 'index'])->name('index');
 Route::get('/landing/filter/{categoryId}', [LandingController::class, 'filter'])->name('landing.filter');
+Route::get('/api/locations/block/{blockId}', [LandingController::class, 'getLocationsByBlock'])->name('api.locations.block');
+Route::post('/payment/submit', [LandingController::class, 'submitPayment'])->name('payment.submit');
+Route::get('/payment/summary/{confirmation}', [LandingController::class, 'paymentSummary'])->name('payment.summary');
 
 Route::middleware(['auth'/*, 'verified'*/])->group(function () {
 
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-;
+
+    Route::prefix('/admin/payment-confirmations')->as('admin.payment-confirmations.')->group(function () {
+        Route::get('', [PaymentConfirmationController::class, 'index'])->name('index');
+        Route::patch('/{confirmation}/status', [PaymentConfirmationController::class, 'updateStatus'])->name('update-status');
+    });
 
     Route::prefix("/location")->as("location.")->group(function () {
         Route::get('', [LocationController::class, 'index'])->name('index');

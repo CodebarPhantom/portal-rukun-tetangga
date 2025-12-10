@@ -14,5 +14,5 @@ class LocationCategory extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'description', 'url_icon'];
+    protected $fillable = ['name', 'type', 'description', 'url_icon'];
 }

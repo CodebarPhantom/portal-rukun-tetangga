@@ -44,4 +44,8 @@ class Location extends Model
         return $query->where('status',1);
     }
 
+    public function locationCategory()
+    {
+        return $this->belongsTo(LocationCategory::class);
+    }
 }

@@ -4,33 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Iuran RT 037 - Villa Permata Hijau</title>
-    <meta name="description" content="Sistem pembayaran iuran RT.037/RW.014 Villa Permata Hijau">
-
-    <link rel="icon" type="image/jpeg" href="{{ asset('storage/logo.jpeg') }}">
+    <title>rumio - Semua tercatat & transparan</title>
+    <meta name="description" content="rumio - Semua tercatat & transparan">
+    <meta name="author" content="Eryan Fauzan">
+    <link rel="icon" type="image/jpeg" href="{{ asset('storage/rumio.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
             @include('welcome.style')
 
 </head>
 
-<body class="font-inter bg-pattern min-h-screen">
-    <!-- Animated Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div
-            class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse-slow">
-        </div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse-slow"
-            style="animation-delay: 1s"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse-slow"
-            style="animation-delay: 2s"></div>
-    </div>
+<body class="font-poppins bg-pattern min-h-screen">
+    <!-- Decorative Shapes -->
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
 
     <!-- Main Container -->
-    <div class="relative z-10 max-w-md mx-auto px-4 py-8">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4">
+        <div class="w-full max-w-2xl">
         <!-- Include Header -->
         @include('welcome.header')
 
@@ -39,6 +34,7 @@
 
         <!-- Include Footer -->
         @include('welcome.footer')
+        </div>
     </div>
 
     <!-- Toast Notification -->

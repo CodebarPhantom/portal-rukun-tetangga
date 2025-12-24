@@ -33,6 +33,7 @@ Route::middleware(['auth'/*, 'verified'*/])->group(function () {
     Route::prefix('/admin/payment-confirmations')->as('admin.payment-confirmations.')->group(function () {
         Route::get('', [PaymentConfirmationController::class, 'index'])->name('index');
         Route::patch('/{confirmation}/status', [PaymentConfirmationController::class, 'updateStatus'])->name('update-status');
+        Route::get('/export', [PaymentConfirmationController::class, 'export'])->name('export');
     });
 
     Route::prefix("/location")->as("location.")->group(function () {

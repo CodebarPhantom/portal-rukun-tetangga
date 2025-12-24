@@ -26,6 +26,38 @@
     <div class="container-fixed">
         <div class="grid pb-7.5">
             <div class="card card-grid min-w-full">
+                <div class="card-header">
+                    <h3 class="card-title">Konfirmasi Pembayaran</h3>
+                    <div class="flex items-center gap-2">
+                        <!-- Month Filter -->
+                        <select id="monthFilter" class="select select-sm w-32">
+                            <option value="">Semua Bulan</option>
+                            @php
+                                $months = [
+                                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                                    5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                                    9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                                ];
+                            @endphp
+                            @foreach($months as $key => $month)
+                                <option value="{{ $key }}">{{ $month }}</option>
+                            @endforeach
+                        </select>
+
+                        <!-- Year Filter -->
+                        <select id="yearFilter" class="select select-sm w-20">
+                            <option value="">Semua</option>
+                            @for($year = 2025; $year <= date('Y') + 2; $year++)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
+                        </select>
+
+                        <button id="exportBtn" class="btn btn-sm btn-success">
+                            <i class="ki-filled ki-file-down"></i>
+                            Export Excel
+                        </button>
+                    </div>
+                </div>
                 <div class="card-body">
                     <div id="kt_remote_table">
                         <div class="scrollable-x-auto">
@@ -146,7 +178,7 @@
                     title: 'Action',
                     render: (data, type, row) => {
                         let actions = '';
-                        
+
                         // Show opposite action button based on current status
                         if (type.status === 'butuh_pengecekan') {
                             actions += `
@@ -185,8 +217,65 @@
             }
         };
 
-        const dataTable = new KTDataTable(element, dataTableOptions);
+        let dataTable = new KTDataTable(element, dataTableOptions);
+        
+        // Global filter variables
+        let currentMonth = '';
+        let currentYear = '';
+        
+        // Override datatable's data fetching
+        const originalFetch = window.fetch;
+        window.fetch = function(url, options) {
+            // Check if this is our datatable API call
+            if (url.includes('/api/v1/payment-confirmations/datatable')) {
+                // Add filter parameters to URL
+                const urlObj = new URL(url);
+                if (currentMonth) urlObj.searchParams.set('month', currentMonth);
+                if (currentYear) urlObj.searchParams.set('year', currentYear);
+                
+                console.log('Modified URL:', urlObj.toString());
+                url = urlObj.toString();
+            }
+            return originalFetch.call(this, url, options);
+        };
+
+        // Simple approach - trigger table reload with custom parameters
+        function applyFilters() {
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            
+            console.log('Filter values:', {month, year});
+            
+            // Update global filter variables
+            currentMonth = month;
+            currentYear = year;
+            
+            // Reload table - fetch override will handle the parameters
+            dataTable.reload();
+        }
+
+        // Add event listeners
+        document.getElementById('monthFilter').addEventListener('change', applyFilters);
+        document.getElementById('yearFilter').addEventListener('change', applyFilters);
+
+        // Export handler
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const month = document.getElementById('monthFilter').value;
+            const year = document.getElementById('yearFilter').value;
+
+            let exportUrl = '{{ route("admin.payment-confirmations.export") }}?';
+            const params = new URLSearchParams();
+
+            if (month) params.append('month', month);
+            if (year) params.append('year', year);
+
+            window.open(exportUrl + params.toString(), '_blank');
+        });
+
         const refreshTable = document.getElementById('refresh-btn').addEventListener('click', function() {
+            // Reset filters
+            document.getElementById('monthFilter').value = '';
+            document.getElementById('yearFilter').value = '';
             dataTable.reload();
         });
 

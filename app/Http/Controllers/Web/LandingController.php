@@ -13,7 +13,7 @@ class LandingController extends MasterController
 {
     public function index()
     {
-        $categories = LocationCategory::orderBy('id','ASC')->get();
+        $categories = LocationCategory::orderBy('sort_order','ASC')->get();
         return view('welcome', compact('categories'));
     }
 
@@ -26,7 +26,7 @@ class LandingController extends MasterController
         $locations = Location::where('location_category_id', $categoryId)->active()->get();
 
         // Get block categories for chained selection (if current category is not block)
-        $blockCategories = LocationCategory::where('type', 'block')->orderBy('id','ASC')->get();
+        $blockCategories = LocationCategory::where('type', 'block')->orderBy('sort_order')->get();
 
         // Return view dengan data yang sudah difilter
         return view('filtered', [

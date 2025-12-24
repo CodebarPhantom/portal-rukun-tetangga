@@ -54,11 +54,9 @@ class PaymentConfirmationController extends MasterController
                 }
             })
             ->when($month, function($query, $month) {
-                \Log::info('Applying month filter:', ['month' => $month]);
                 return $query->where('month', $month);
             })
             ->when($year, function($query, $year) {
-                \Log::info('Applying year filter:', ['year' => $year]);
                 return $query->where('year', $year);
             })
             ->orderBy($sortField, $sortOrder)

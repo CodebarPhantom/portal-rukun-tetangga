@@ -14,14 +14,14 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
 
 <head>
     <meta charset="utf-8">
-    <title> Portal Villa Permata Hijau Karawang - {{ 'Signin' ?? 'Karawang' }} </title>
+    <title> Rumio - {{ 'Signin' ?? 'Karawang' }} </title>
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex">
     <meta name="author" content="Eryan Fauzan">
-    <meta name="description" content="Portal Villa Permata Hijau Karawang - Portal Pengelolaan Iuran Warga Digital untuk Kemudahan dan Efisiensi">
+    <meta name="description" content="Rumio - Portal Pengelolaan Iuran Warga Digital untuk Kemudahan dan Efisiensi">
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.jpeg') }}" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="{{ asset('storage/logo.jpeg') }}" />
     <link rel="shortcut icon" href="{{ asset('storage/logo.jpeg') }}" />
@@ -85,7 +85,7 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
                     @csrf
                     <div class="text-center mb-2.5">
                         <a href="h#">
-                            <img class="h-[100px] max-w-non mx-auto mb-2.5" src="{{asset('storage/logo.jpeg') }}" />
+                            <img class="h-[100px] max-w-non mx-auto mb-2.5" src="{{asset('storage/rumio.png') }}" />
                         </a>
                         <h3 class="text-lg font-medium text-gray-900 leading-none mt-2.5 mb-2.5">
                             Akun Pengelola Portal
@@ -153,7 +153,7 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
 
                 <div class="flex flex-col gap-3">
                     <h3 class="text-2xl font-semibold text-gray-400">
-                        Portal Administrator Villa Permata Hijau Karawang
+                        Portal Administrator Rumio
                     </h3>
                     <div class="text-base font-medium text-gray-200">
                         Selamat datang di portal<br>

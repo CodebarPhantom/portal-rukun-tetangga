@@ -44,29 +44,45 @@
             <input type="text" id="payerName" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Masukkan nama lengkap">
         </div>
 
-        <!-- Month -->
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Bulan</label>
-            <select id="monthSelect" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm">
-                <option value="">-- Pilih Bulan --</option>
-                @php 
-                    $months = [
-                        1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
-                        5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
-                        9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-                    ];
-                    $currentMonth = date('n');
-                @endphp
-                @foreach ($months as $key => $month)
-                    <option value="{{ $key }}" {{ $key == $currentMonth ? 'selected' : '' }}>{{ $month }}</option>
-                @endforeach
-            </select>
+        <!-- Month and Year -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Bulan</label>
+                <select id="monthSelect" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm">
+                    <option value="">-- Pilih Bulan --</option>
+                    @php 
+                        $months = [
+                            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                        ];
+                        $currentMonth = date('n');
+                    @endphp
+                    @foreach ($months as $key => $month)
+                        <option value="{{ $key }}" {{ $key == $currentMonth ? 'selected' : '' }}>{{ $month }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tahun</label>
+                <select id="yearSelect" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm">
+                    <option value="">-- Pilih Tahun --</option>
+                    @php 
+                        $currentYear = date('Y');
+                        $startYear = 2025;
+                        $endYear = $currentYear + 2;
+                    @endphp
+                    @for ($year = $startYear; $year <= $endYear; $year++)
+                        <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+                    @endfor
+                </select>
+            </div>
         </div>
 
         <!-- Amount -->
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Nominal (Rp)</label>
-            <input type="text" id="amount" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0">
+            <input type="text" id="amount" class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="0" inputmode="numeric">
         </div>
 
         <!-- Upload Proof -->

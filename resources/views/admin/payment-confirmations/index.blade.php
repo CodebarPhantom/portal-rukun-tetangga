@@ -145,20 +145,26 @@
                 action: {
                     title: 'Action',
                     render: (data, type, row) => {
-                        let actions = `
-                        <button class="btn btn-icon btn-sm btn-clear btn-warning" data-tooltip="#pending" onclick="updateStatus(${type.id}, 'butuh_pengecekan')">
-                            <i class="ki-filled ki-time"></i>
-                        </button>
-                        <div class="tooltip transition-opacity duration-300" id="pending">
-                            Butuh Pengecekan
-                        </div>
-
-                        <button class="btn btn-icon btn-sm btn-clear btn-success" data-tooltip="#checked" onclick="updateStatus(${type.id}, 'sudah_dicek')">
-                            <i class="ki-filled ki-check"></i>
-                        </button>
-                        <div class="tooltip transition-opacity duration-300" id="checked">
-                            Sudah Dicek
-                        </div>`;
+                        let actions = '';
+                        
+                        // Show opposite action button based on current status
+                        if (type.status === 'butuh_pengecekan') {
+                            actions += `
+                            <button class="btn btn-icon btn-sm btn-clear btn-success" data-tooltip="#checked" onclick="updateStatus(${type.id}, 'sudah_dicek')">
+                                <i class="ki-filled ki-check"></i>
+                            </button>
+                            <div class="tooltip transition-opacity duration-300" id="checked">
+                                Sudah Dicek
+                            </div>`;
+                        } else {
+                            actions += `
+                            <button class="btn btn-icon btn-sm btn-clear btn-warning" data-tooltip="#pending" onclick="updateStatus(${type.id}, 'butuh_pengecekan')">
+                                <i class="ki-filled ki-time"></i>
+                            </button>
+                            <div class="tooltip transition-opacity duration-300" id="pending">
+                                Butuh Pengecekan
+                            </div>`;
+                        }
 
                         if (type.proof_file) {
                             actions += `

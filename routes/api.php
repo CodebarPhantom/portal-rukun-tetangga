@@ -34,6 +34,7 @@ Route::as("api.")->group(function () {
         })->name('server-time');
 
         Route::get('/locations/block/{blockId}', [LocationController::class, 'getLocationsByBlock'])->name('locations.block');
+        Route::get('/payment/track/{confirmationCode}', [LocationController::class, 'trackPayment'])->name('payment.track');
 
         Route::middleware(['auth:sanctum'])->group(function () {
 

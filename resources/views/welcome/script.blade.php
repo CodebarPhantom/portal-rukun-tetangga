@@ -185,14 +185,16 @@
                     const locationId = document.getElementById('locationSelect').value;
                     const payerName = document.getElementById('payerName').value;
                     const month = document.getElementById('monthSelect').value;
+                    const year = document.getElementById('yearSelect').value;
                     const amount = parseNumber(document.getElementById('amount').value || '0');
+                    const proofFile = document.getElementById('proofFile').files[0];
 
                     // Validation
-                    if (!locationId || !payerName || !month || !amount) {
+                    if (!locationId || !payerName || !month || !year || !amount || !proofFile) {
                         Swal.fire({
                             icon: 'warning',
                             title: 'Form Belum Lengkap',
-                            text: 'Mohon lengkapi semua field yang wajib diisi',
+                            text: 'Mohon lengkapi semua field yang wajib diisi termasuk bukti transfer',
                             confirmButtonColor: '#3b82f6'
                         });
                         return;
@@ -216,10 +218,10 @@
                     submitData.append('location_category_id', document.querySelector('[data-category-id]')?.getAttribute('data-category-id') || '');
                     submitData.append('payer_name', payerName);
                     submitData.append('month', month);
+                    submitData.append('year', year);
                     submitData.append('amount', amount);
                     submitData.append('notes', document.getElementById('notes').value);
 
-                    const proofFile = document.getElementById('proofFile').files[0];
                     if (proofFile) {
                         submitData.append('proof_file', proofFile);
                     }

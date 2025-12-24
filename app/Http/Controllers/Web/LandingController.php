@@ -49,8 +49,9 @@ class LandingController extends MasterController
             'location_category_id' => 'required|exists:location_categories,id',
             'payer_name' => 'required|string|max:255',
             'month' => 'required|integer|between:1,12',
+            'year' => 'required|integer|min:2025',
             'amount' => 'required|numeric|min:0',
-            'proof_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'proof_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
             'notes' => 'nullable|string'
         ]);
 
@@ -65,7 +66,7 @@ class LandingController extends MasterController
             'location_category_id' => $request->location_category_id,
             'payer_name' => $request->payer_name,
             'month' => $request->month,
-            'year' => date('Y'),
+            'year' => $request->year,
             'amount' => $request->amount,
             'proof_file' => $proofPath,
             'notes' => $request->notes,

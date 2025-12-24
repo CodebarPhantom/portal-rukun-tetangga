@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Web\LocationController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\PermissionController;
@@ -18,6 +19,10 @@ Route::get('/landing/filter/{categoryId}', [LandingController::class, 'filter'])
 
 Route::post('/payment/submit', [LandingController::class, 'submitPayment'])->name('payment.submit');
 Route::get('/payment/summary/{confirmation}', [LandingController::class, 'paymentSummary'])->name('payment.summary');
+Route::get('/payment/tracking', function (Request $request) {
+    $code = $request->get('code');
+    return view('payment-tracking', compact('code'));
+})->name('payment.tracking');
 
 
 Route::middleware(['auth'/*, 'verified'*/])->group(function () {

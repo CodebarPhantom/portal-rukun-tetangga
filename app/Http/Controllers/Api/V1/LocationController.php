@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\LocationService;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use App\Models\PaymentConfirmation;
 use Illuminate\Support\Facades\Log;
 
 class LocationController extends MasterController
@@ -117,6 +118,44 @@ class LocationController extends MasterController
                 ->get();
             
             $this->data = $locations;
+        };
+
+        return $this->callFunction($func);
+    }
+
+    public function trackPayment($confirmationCode)
+    {
+        $func = function () use ($confirmationCode) {
+            $confirmation = PaymentConfirmation::with(['location', 'locationCategory'])
+                ->where('confirmation_code', $confirmationCode)
+                ->first();
+
+            if (!$confirmation) {
+                $this->success = false;
+                $this->message = 'Kode konfirmasi tidak ditemukan';
+                return;
+            }
+
+            $months = [
+                1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr',
+                5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agu',
+                9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
+            ];
+
+            $this->data = [
+                'id' => $confirmation->id,
+                'confirmation_code' => $confirmation->confirmation_code,
+                'payer_name' => $confirmation->payer_name,
+                'category' => $confirmation->locationCategory->name,
+                'location' => $confirmation->location->name,
+                'month' => $confirmation->month,
+                'year' => $confirmation->year,
+                'amount' => $confirmation->amount,
+                'amount_formatted' => number_format($confirmation->amount, 0, ',', '.'),
+                'status' => $confirmation->status,
+                'status_label' => $confirmation->status_label,
+                'created_at' => $confirmation->created_at->format('d/m/Y H:i'),
+            ];
         };
 
         return $this->callFunction($func);

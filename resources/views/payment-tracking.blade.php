@@ -34,7 +34,7 @@
                 <div class="logo-container inline-block p-6 bg-white rounded-3xl mb-6 relative shadow-lg">
                     <div class="deco-circle deco-circle-1"></div>
                     <div class="deco-circle deco-circle-2"></div>
-                    <img src="{{ asset('storage/rumio.png') }}" alt="Logo rumio"
+                    <img src="{{ asset('images/rumio.png') }}" alt="Logo rumio"
                         class="w-24 h-24 object-contain relative z-10">
                 </div>
                 <h1 class="text-5xl md:text-6xl font-bold font-quicksand mb-2"

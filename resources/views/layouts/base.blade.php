@@ -21,10 +21,10 @@ License: https://keenthemes.com/metronic/tailwind/docs/getting-started/license
     <meta name="googlebot" content="noindex">
     <meta name="author" content="Eryan Fauzan">
     <meta name="description" content="Portal Villa Permata Hijau Karawang - Portal Pengelolaan Iuran Warga Digital untuk Kemudahan dan Efisiensi">
-    <link rel="icon" type="image/png" href="{{ asset('storage/rumio.png') }}" sizes="48x48" />
-    <link rel="icon" type="image/svg+xml" href="{{ asset('storage/rumio.png') }}" />
-    <link rel="shortcut icon" href="{{ asset('storage/rumio.png') }}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('storage/rumio.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('images/rumio.png') }}" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/rumio.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('images/rumio.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/rumio.png') }}" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <style>
